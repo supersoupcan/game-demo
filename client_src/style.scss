@@ -1,5 +1,11 @@
-$primary-color: yellow;
+$primary-color: white;
+$secondary-color: yellow;
 
 body{
   background-color: $primary-color;
+}
+
+#root canvas{
+  background-color: $secondary-color;
+  border: 1px solid black;
 }

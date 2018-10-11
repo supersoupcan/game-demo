@@ -1,7 +1,7 @@
 {
-  "name": "express-babel-boilerplate",
+  "name": "game-demo",
   "version": "1.0.0",
-  "description": "clone when starting a new project",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "nodemon ./server/server",
@@ -26,6 +26,7 @@
     "webpack-command": "^0.4.1"
   },
   "dependencies": {
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "mathjs": "^5.1.2"
   }
 }
