@@ -12,6 +12,7 @@ App.prototype = {
   init: function(){
     this.events.init();
     this.viewport.init(this.events);
+    //this.viewport.render();
     this.animate();
   },
   animate: function(){

@@ -18,12 +18,6 @@ import { Vector, Hex } from '../common/vectors';
 //
 //  so we move from, Hex -> Euc -> Iso or Iso -> Euc -> Hex (inverse)
 //
-//  in the normal case we move a 3D position to a final 2D isometric projection
-//  in the inverse case, we invert the 2D projection, and assume that z = 0, 
-//    as the plane is non-determinate.
-//    (if it sounds like i know what i'm taling about, i really don't.
-//    I watched a single 3Blue1Brown video on the subject)
-//    https://www.youtube.com/watch?v=Ip3X9LOh2dk
 */
 
 
@@ -113,7 +107,7 @@ const LayoutIso2D = function(scale, origin){
 
 const process = {
   iso: (vertex) => {
-    return [vertex[0], vertex[2]];
+    return [vertex[0], vertex[2], vertex[1]];
   },
   euc: (vertex) => [vertex[0], vertex[1], vertex[2]],
   hex: (vertex) => new Hex(vertex[0], vertex[1])

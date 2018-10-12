@@ -1,82 +1,130 @@
 import { Hex } from './vectors';
 
-function completeIndices(){
+//Creates various Shapes composed of Hex Tiles
+//Each Shape is built around a center Hex tile of [0, 0]
+
+
+//recursively maps arrays which increasing
+//deepest values by a set amount
+
+
+function indicesMapper(){
+  //most shapes have different configurations depending on
+  //which hex coordiantes are chosen to iterate around... :P
+  //??!??!??!
+  // documentation is hard
+
+  //argv[0]: primary hex coordinate (0 - 2);
+  //argv[1]: secondary hex coordinate ( 0 - 2);
+
   let indicesMap = [...new Array(3)];
   this.indices.forEach((chosenIndex, index) => {
     indicesMap[chosenIndex] = index;
   });
 
-  return (coords) => {
-    return coords.map((value, index) => {
+  //returns a custom completeHex function
+  return (c0, c1) => {
+    const coords = [c0, c1];
+    return new Hex(...coords.map((_, index) => {
       if(Number.isInteger(indicesMap[index])){
         return coords[indicesMap[index]];
       }else{
         return coords.reduce((acc, cur) => acc - cur, 0);
       }
-    })
+    }))
   }
+}
+
+const HexShape = function(size, indices){
+  this.size = size;
+  this.indices = indices;
+  this.completeHex = indicesMapper.call(this);
+}
+
+HexShape.prototype.tiles = function(){
+  const tiles = [];
+  this.iterator(this.size, (c0, c1) => {
+    tiles.push(this.completeHex(c0, c1))
+  });
+  return tiles;
+}
+
+HexShape.prototype.border = function(){
+  const border = [];
+  const size = this.size.map((size) => size + 1);
+  this.iterator(size, (c0, c1) => {
+    if(this.onBorder(c0, c1, size)){
+      border.push(this.completeHex(c0, c1));
+    }
+  })
+  return border;
+}
+
+HexShape.prototype.both = function(){
+  const tiles = [];
+  const border = [];
+  const size = this.size.map((size) => size + 1);
+  this.iterator(size, (c0, c1) => {
+    const tile = this.completeHex(c0, c1);
+    if(this.onBorder(c0, c1, size)){
+      tiles.push(tile);
+    }else{
+      border.push(tile);
+    }
+  })
+  return {tiles, border};
 }
 
 const Rectangle = function(size, indices){
-  this.size = size;
-  this.indices = indices;
-}
-
-Rectangle.prototype.completeIndices = completeIndices;
-
-Rectangle.prototype.tiles = function(){
-  let tiles = [];
-  const indicesMapper = this.completeIndices();
-  for(let c0 = -this.size[0][0]; c0 <= this.size[0][1]; c0++){
-    let c0_offset = Math.floor(c0/2);
-    for(let c1 = -this.size[1][0] - c0_offset; c1 <= this.size[1][1] - c0_offset; c1++){
-      tiles.push(new Hex(...indicesMapper([c0, c1])));
+  HexShape.call(this, size, indices);
+  this.iterator = function(size, callback){
+    for(let c0 = -size[0]; c0 <= size[0]; c0++){
+      let c0_offset = Math.floor(c0/2);
+      for(let c1 = -size[1] - c0_offset; c1 <= size[1] - c0_offset; c1++){
+        callback(c1, c0);
+      }
     }
   }
-  return tiles;
 }
+
+Rectangle.prototype = Object.create(HexShape.prototype);
+Rectangle.prototype.constructor = Rectangle;
 
 const Parallelogram = function(size, indices){
-  this.size = size;
-  this.indices = indices;
-}
-
-Parallelogram.prototype.completeIndices = completeIndices;
-
-Parallelogram.prototype.tiles = function(){
-  let tiles = [];
-  const indicesMapper = this.completeIndices();
-  for(let c0 = -this.size[0][0]; c0 <= this.size[0][1]; c0++){
-    for(let c1 = -this.size[1][0]; c1 <= this.size[1][1]; c1++){
-      tiles.push(new Hex(...indicesMapper([c0, c1])))
+  HexShape.call(this, size, indices);
+  this.iterator = function(size, callback){
+    for(let c0 = -size[0]; c0 <= size[0]; c0++){
+      for(let c1 = -size[1]; c1 <= size[1]; c1++){
+        callback(c0, c1);
+      }
     }
   }
-  return tiles;
 }
+
+Parallelogram.prototype = Object.create(HexShape.prototype);
+Parallelogram.prototype.constructor = Parallelogram;
 
 const Hexagon = function(size, indices){
-  this.size = size;
-  this.indices = indices;
-}
-
-Hexagon.prototype.completeIndices = completeIndices;
-
-Hexagon.prototype.tiles = function(){
-  let tiles = [];
-  const indicesMapper = this.completeIndices();
-  for(let c0 = -this.size[0]; c0 <= this.size[0]; c0++){
-    let c1_1 = Math.max(-this.size[1], -c0 - this.size[1]);
-    let c1_2 = Math.min(this.size[1], -c0 + this.size[1]);
-    for(let c1 = c1_1; c1 <= c1_2; c1++){
-      tiles.push(new Hex(...indicesMapper([c0, c1])));
+  HexShape.call(this, size, indices);
+  this.iterator = function(size, callback){
+    for(let c0 = -size[0]; c0 <= size[0]; c0++){
+      let c1_0 = Math.max(-size[1], -c0 - size[1]);
+      let c1_1 = Math.min(size[1], -c0 + size[1]);
+      for(let c1 = c1_0; c1 <= c1_1; c1++){
+        callback(c0, c1);
+      }
     }
   }
-  return tiles;
+  this.onBorder = function(c0, c1, size){
+    return (
+      Math.abs(c0) === size[0] || 
+      Math.abs(c1) === size[1] ||
+      Math.abs(-c0-c1) === size[1]
+    )
+  }
 }
 
-
-
-
-
+Hexagon.prototype = Object.create(HexShape.prototype);
+Hexagon.prototype.constructor = Hexagon;
 
 export { Parallelogram, Hexagon, Rectangle };

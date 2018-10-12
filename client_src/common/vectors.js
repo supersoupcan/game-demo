@@ -1,7 +1,6 @@
 import * as math from 'mathjs';
 
-//no simple way of subclassing arrays beyond ES6 class notation
-
+//no simple way of subclassing. Alas, ES6 class notation!
 
 class Vector extends Array{
   constructor(){
@@ -78,9 +77,13 @@ class Hex extends Vector{
   }
 }
 
+//Hex Direction Index can be calculated by 
+//picking the smallest Corner Index
+//with the notable exception of (0, 5), where the direction is 5 
+
 const hexDirections = [
-  new Hex(1, 0), new Hex(1, -1), new Hex(0, -1),
-  new Hex(-1, 0), new Hex(-1, 1), new Hex(0, 1)
+  new Hex(0, 1), new Hex(-1, 1), new Hex(-1, 0),
+  new Hex(0, -1), new Hex(1, -1), new Hex(1, 0)
 ];
 
 export { Vector, Hex }

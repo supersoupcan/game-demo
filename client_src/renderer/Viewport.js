@@ -12,7 +12,7 @@ const ratio = new Vector(size, Math.sqrt(3)/3 * size);
 const Viewport = function(){
   this.size = ratio;
   this.layout = new Layout(
-    new Vector(100, 100),
+    new Vector(10, 10),
     new Vector(this.size[0]/2, this.size[1]/2)
   );
   this.layers = new Map([

@@ -4,7 +4,7 @@ const Layer = function(canvas, render, viewport){
   this.ctx = canvas.getContext('2d');
   this.render = render;
   this.rerender = true;
-  this.round = false;
+  this.round = true;
   this.styles = {
     fillStyle: 'pink',
     strokeStyle: 'black',
@@ -43,7 +43,11 @@ Layer.prototype.body = function(vertices, body){
 
 //think in three dimensions;
 
-Layer.prototype.body = function(vertices, faces){
+Layer.prototype.body = function(vertices, faces, styles){
+  if(styles) this.setStyles(styles);
+  if(this.round){
+    vertices = vertices.map((vertice) => vertice.map((coord) => Math.round(coord)));
+  }
   faces.forEach((face) => {
     const end = face[face.length - 1];
     this.ctx.beginPath();
