@@ -1,0 +1,191 @@
+Exporter version: 5.6.4, Blender version: 2.79 (sub 0)
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used :
+		export scope        :  SELECTED
+		inline textures     :  false
+		Positions Precision :  4
+		Normals Precision   :  3
+		UVs Precision       :  3
+		Vert Color Precision:  3
+		Mat Weight Precision:  2
+		texture directory   :  C:\Users\super\Desktop\game\server\assets\tiles\
+	Python World class constructor completed
+	processing begun of mesh:  water_wall_ground.edge
+		processing begun of Standard material:  water
+		processing begun of Standard material:  sand
+		processing begun of Standard material:  wall
+		processing begun of multimaterial:  tiles_1.Multimaterial#0
+		num positions      :  14
+		num normals        :  14
+		num uvs            :  0
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  24
+	processing begun of mesh:  water_water_water.edge
+		registered as also a user of material:  water
+		num positions      :  7
+		num normals        :  7
+		num uvs            :  0
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  18
+	processing begun of mesh:  ground_ground_ground.edge
+		processing begun of Standard material:  ground
+		num positions      :  7
+		num normals        :  7
+		num uvs            :  0
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  18
+	processing begun of mesh:  wall_wall_wall.edge
+		registered as also a user of material:  wall
+		num positions      :  7
+		num normals        :  7
+		num uvs            :  0
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  18
+	processing begun of mesh:  chest.acc
+		processing begun of Standard material:  Material
+		num positions      :  18
+		num normals        :  18
+		num uvs            :  0
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  96
+	processing begun of mesh:  road_connector.acc
+		processing begun of Standard material:  road
+		num positions      :  10
+		num normals        :  10
+		num uvs            :  0
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  24
+	processing begun of mesh:  road.acc
+		registered as also a user of material:  road
+		num positions      :  7
+		num normals        :  7
+		num uvs            :  0
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  18
+	processing begun of mesh:  void_wall_wall.edge
+		registered as also a user of material:  wall
+		processing begun of Standard material:  void
+		processing begun of multimaterial:  tiles_1.Multimaterial#1
+		num positions      :  14
+		num normals        :  14
+		num uvs            :  0
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  33
+	processing begun of mesh:  wall_void_void.edge
+		registered as also a user of material:  void
+		registered as also a user of material:  wall
+		processing begun of multimaterial:  tiles_1.Multimaterial#2
+		num positions      :  8
+		num normals        :  8
+		num uvs            :  0
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  12
+	processing begun of mesh:  wall_water_ground.edge
+		registered as also a user of material:  water
+		registered as also a user of material:  sand
+		registered as also a user of material:  wall
+		processing begun of multimaterial:  tiles_1.Multimaterial#3
+		num positions      :  14
+		num normals        :  14
+		num uvs            :  0
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  24
+	processing begun of mesh:  water.center
+		registered as also a user of material:  water
+		num positions      :  7
+		num normals        :  7
+		num uvs            :  0
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  18
+	processing begun of mesh:  ground_water_water.edge
+		registered as also a user of material:  water
+		registered as also a user of material:  sand
+		processing begun of multimaterial:  tiles_1.Multimaterial#4
+		num positions      :  10
+		num normals        :  10
+		num uvs            :  0
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  18
+	processing begun of mesh:  water_wall_wall.edge
+		registered as also a user of material:  water
+		registered as also a user of material:  wall
+		processing begun of multimaterial:  tiles_1.Multimaterial#5
+		num positions      :  13
+		num normals        :  13
+		num uvs            :  0
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  30
+	processing begun of mesh:  wall_water_water.edge
+		registered as also a user of material:  wall
+		registered as also a user of material:  water
+		processing begun of multimaterial:  tiles_1.Multimaterial#6
+		num positions      :  11
+		num normals        :  11
+		num uvs            :  0
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  24
+	processing begun of mesh:  water_ground_ground.edge
+		registered as also a user of material:  ground
+		registered as also a user of material:  sand
+		processing begun of multimaterial:  tiles_1.Multimaterial#7
+		num positions      :  10
+		num normals        :  10
+		num uvs            :  0
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  18
+	processing begun of mesh:  wall.center
+		registered as also a user of material:  wall
+		num positions      :  7
+		num normals        :  7
+		num uvs            :  0
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  18
+	processing begun of mesh:  ground.center
+		registered as also a user of material:  ground
+		num positions      :  7
+		num normals        :  7
+		num uvs            :  0
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  18
+	processing begun of mesh:  wall_ground_ground.edge
+		registered as also a user of material:  ground
+		registered as also a user of material:  sand
+		registered as also a user of material:  wall
+		processing begun of multimaterial:  tiles_1.Multimaterial#8
+		num positions      :  14
+		num normals        :  14
+		num uvs            :  0
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  24
+	processing begun of mesh:  ground_wall_wall.edge
+		registered as also a user of material:  wall
+		registered as also a user of material:  sand
+		processing begun of multimaterial:  tiles_1.Multimaterial#9
+		num positions      :  13
+		num normals        :  13
+		num uvs            :  0
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  30
+========= Writing of scene file started =========
+========= Writing of scene file completed =========
+========= end of processing =========
+elapsed time:  0 min, 0.0802 secs

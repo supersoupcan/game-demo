@@ -1,4 +1,3 @@
-import './style.scss';
 import App from './App';
 
 window.document.onreadystatechange = function(){

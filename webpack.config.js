@@ -8,6 +8,11 @@ module.exports = {
     path: path.resolve(__dirname, 'client_dist'),
     filename: 'bundle.js'
   },
+  externals: {
+    oimo: "OIMO",
+    cannon: "CANNON",
+    earcut: "EARCUT"
+  },
   module: {
     rules: [{
       test: /\.js$/,
@@ -17,13 +22,7 @@ module.exports = {
         options: {
           presets: ['@babel/env']
         }
-      },
-    },{
-      test: /\.scss$/,
-      use: ExtractTextPlugin.extract({
-        fallback: 'style-loader',
-        use: ['css-loader', 'sass-loader']
-      }),
+      }
     }]
   },
   plugins: [

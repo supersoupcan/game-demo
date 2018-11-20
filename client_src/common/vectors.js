@@ -1,10 +1,23 @@
 import * as math from 'mathjs';
+import flotsam from './flotsam';
 
-//no simple way of subclassing. Alas, ES6 class notation!
+//no simple way of subclassing Arrays. Alas, ES6 class notation!
+//flotsam is used to efficiently serialize instances to unique strings
+
+function lerp(a, b, t){
+  return a * ( 1 - t ) + b * t;
+}
 
 class Vector extends Array{
   constructor(){
-    super(...arguments);
+    if(arguments[0] && typeof arguments[0] === 'string'){
+      super(...flotsam.decode(arguments[0]));
+    }else{
+      super(...arguments);
+    }
+  }
+  serialize(){
+    return flotsam.encode(this);
   }
   add(vector){
     return new this.constructor(...this.map((v, i) => v + vector[i]));
@@ -12,17 +25,11 @@ class Vector extends Array{
   subtract(vector){
     return new this.constructor(...this.map((v, i) => v - vector[i]));
   }
-  multiply(vector){
-    return new this.constructor(...this.map((v, i) => v * vector[i]));
+  multiply(constant){
+    return new this.constructor(...this.map((v, i) => v * constant));
   }
-  divide(vector){
-    return new this.constructor(...this.map((v, i) => v / vector[i]));
-  }
-  length(){
-    return this.reduce((a, c) => Math.abs(c) + a) / this.length;
-  }
-  distance(vector){
-    return this.subtract(vector).length();
+  divide(constant){
+    return new this.constructor(...this.map((v, i) => v / constant));
   }
   transform(matrix, CustomConstructor = Vector){
     const transformation = math.multiply(this, matrix).slice(0, -1);
@@ -33,9 +40,6 @@ class Vector extends Array{
 class Hex extends Vector{
   constructor(){
     super(...arguments);
-  }
-  get key(){
-    return this.join(',');
   }
   complete(shell){
     //completes a hex of any two coordinants
@@ -56,8 +60,41 @@ class Hex extends Vector{
   direction(directionIndex){
     return hexDirections[directionIndex % 6];
   }
-  neighbour(){
+  directions(){
+    return hexDirections;
+  }
+  neighbour(directionIndex){
     return this.add(this.direction(directionIndex))
+  }
+  edges(){
+    return hexEdges;
+  }
+  corner(index){
+    return this.add(this.neighbour(index)).add(this.neighbour((index + 1) % 6)).divide(3);
+  }
+  vLength(){
+    return (Math.abs(this[0]) + Math.abs(this[1]) + Math.abs(-this[0] - this[1])) / 2;
+  }
+  distance(vector){
+
+    const subtract = this.subtract(vector);
+    const vLength = subtract.vLength();
+    return vLength;
+  }
+  line(hex){
+    const distance = this.distance(hex);
+    const step = 1 / Math.max(distance, 1);
+    const results = [];
+    for(let i = 0; i <= distance; i++){
+      results.push(this.lerp(hex, step * i).round());
+    }
+    return results;
+  }
+  lerp(hex, constant){
+    return new Hex(
+      lerp(this[0], hex[0], constant),
+      lerp(this[1], hex[1], constant)
+    )
   }
   round(){
     // knowing q = -r -s, resolve Hex to closest int position,
@@ -75,11 +112,19 @@ class Hex extends Vector{
 
     return new Hex(rounded[0], rounded[1]);
   }
+  toEuc(){
+    return {
+      x: Math.sqrt(3) * this[0] + Math.sqrt(3)/2 * this[1],
+      y: 3/2 * this[1]
+    }
+  }
+  fromEuc(x, y){
+    return new Hex(
+      Math.sqrt(3)/3 * x + -1/3 * y,
+      2/3 * y
+    )
+  }
 }
-
-//Hex Direction Index can be calculated by 
-//picking the smallest Corner Index
-//with the notable exception of (0, 5), where the direction is 5 
 
 const hexDirections = [
   new Hex(0, 1), new Hex(-1, 1), new Hex(-1, 0),

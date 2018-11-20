@@ -15,17 +15,16 @@
     "@babel/preset-env": "^7.1.0",
     "babel-cli": "^6.26.0",
     "babel-loader": "^8.0.4",
-    "css-loader": "^1.0.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "html-webpack-plugin": "^3.2.0",
-    "node-sass": "^4.9.3",
     "nodemon": "^1.18.4",
-    "sass-loader": "^7.1.0",
     "style-loader": "^0.23.0",
     "webpack": "^4.20.2",
     "webpack-command": "^0.4.1"
   },
   "dependencies": {
+    "babylonjs": "^3.3.0",
+    "babylonjs-loaders": "^3.3.0",
     "express": "^4.16.3",
     "mathjs": "^5.1.2"
   }

@@ -1,0 +1,1 @@
+Optimize edge rending by creating a pool of outline meshes and recognizing and rotating accordingly.

@@ -41,38 +41,40 @@ const HexShape = function(size, indices){
   this.completeHex = indicesMapper.call(this);
 }
 
-HexShape.prototype.tiles = function(){
-  const tiles = [];
+HexShape.prototype.content = function(serialize){
+  const content = [];
   this.iterator(this.size, (c0, c1) => {
-    tiles.push(this.completeHex(c0, c1))
+    const hex = this.completeHex(c0, c1);
+    content.push(serialize ? hex.serialize() : hex);
   });
-  return tiles;
+  return content;
 }
 
-HexShape.prototype.border = function(){
+HexShape.prototype.border = function(serialize){
   const border = [];
   const size = this.size.map((size) => size + 1);
   this.iterator(size, (c0, c1) => {
     if(this.onBorder(c0, c1, size)){
-      border.push(this.completeHex(c0, c1));
+      const hex = this.completeHex(c0, c1);
+      border.push(serialize ? hex.serialize() : hex);
     }
   })
   return border;
 }
 
-HexShape.prototype.both = function(){
-  const tiles = [];
+HexShape.prototype.tiles = function(serialize){
+  const content = [];
   const border = [];
   const size = this.size.map((size) => size + 1);
   this.iterator(size, (c0, c1) => {
-    const tile = this.completeHex(c0, c1);
+    const hex = this.completeHex(c0, c1);
     if(this.onBorder(c0, c1, size)){
-      tiles.push(tile);
+      border.push(serialize ? hex.serialize() : hex);
     }else{
-      border.push(tile);
+      content.push(serialize ? hex.serialize() : hex);
     }
   })
-  return {tiles, border};
+  return {content, border};
 }
 
 const Rectangle = function(size, indices){

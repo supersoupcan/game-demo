@@ -51,7 +51,7 @@ const MinBinaryHeap = function(){
   this.map = new Map();
 }
 
-MinBinaryHeap.prototype.build = function(values){
+MinBinaryHeap.prototype.init = function(values){
   this.heap = values.map((value, index) => {
     this.map.set(value, index);
     return new Node(Infinity, value);
