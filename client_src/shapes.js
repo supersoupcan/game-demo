@@ -1,28 +1,14 @@
-import { Hex } from './vectors';
+import Hex from './Hex';
 
 //Creates various Shapes composed of Hex Tiles
 //Each Shape is built around a center Hex tile of [0, 0]
 
-
-//recursively maps arrays which increasing
-//deepest values by a set amount
-
-
 function indicesMapper(){
-  //most shapes have different configurations depending on
-  //which hex coordiantes are chosen to iterate around... :P
-  //??!??!??!
-  // documentation is hard
-
-  //argv[0]: primary hex coordinate (0 - 2);
-  //argv[1]: secondary hex coordinate ( 0 - 2);
-
   let indicesMap = [...new Array(3)];
   this.indices.forEach((chosenIndex, index) => {
     indicesMap[chosenIndex] = index;
   });
 
-  //returns a custom completeHex function
   return (c0, c1) => {
     const coords = [c0, c1];
     return new Hex(...coords.map((_, index) => {
@@ -41,40 +27,40 @@ const HexShape = function(size, indices){
   this.completeHex = indicesMapper.call(this);
 }
 
-HexShape.prototype.content = function(serialize){
-  const content = [];
+HexShape.prototype.contentSet = function(){
+  const contentSet = new Set();
   this.iterator(this.size, (c0, c1) => {
     const hex = this.completeHex(c0, c1);
-    content.push(serialize ? hex.serialize() : hex);
+    contentSet.add(hex.serialize());
   });
-  return content;
+  return contentSet;
 }
 
-HexShape.prototype.border = function(serialize){
-  const border = [];
+HexShape.prototype.borderSet = function(){
+  const borderSet = new Set();
   const size = this.size.map((size) => size + 1);
   this.iterator(size, (c0, c1) => {
     if(this.onBorder(c0, c1, size)){
       const hex = this.completeHex(c0, c1);
-      border.push(serialize ? hex.serialize() : hex);
+      borderSet.add(hex.serialize());
     }
   })
-  return border;
+  return borderSet;
 }
 
-HexShape.prototype.tiles = function(serialize){
-  const content = [];
-  const border = [];
+HexShape.prototype.sets = function(){
+  const contentSet = new Set();
+  const borderSet = new Set();
   const size = this.size.map((size) => size + 1);
   this.iterator(size, (c0, c1) => {
     const hex = this.completeHex(c0, c1);
     if(this.onBorder(c0, c1, size)){
-      border.push(serialize ? hex.serialize() : hex);
+      borderSet.add(hex.serialize());
     }else{
-      content.push(serialize ? hex.serialize() : hex);
+      contentSet.add(hex.serialize());
     }
   })
-  return {content, border};
+  return {borderSet, contentSet};
 }
 
 const Rectangle = function(size, indices){

@@ -60,7 +60,6 @@ Viewport.prototype.init = async function(canvas, events){
 
     const points = [];
 
-    const  { pickedPoint } = pick;
 
     const hexBase = Hex.prototype.fromEuc(pickedPoint.x, pickedPoint.z);
     const hexCenter = hexBase.round();
@@ -233,7 +232,7 @@ Viewport.prototype.createTiles = function(level, isEdges){
       tileMesh.convertToFlatShadedMesh();
       if(isEdges){
         tileMesh.rotate(Axis.Y, Math.PI/6, Space.WORLD);
-        tileMesh.scaling = new Vector3(Math.sqrt(3)/3,  Math.sqrt(3)/3,  Math.sqrt(3)/3);
+        tileMesh.scaling = new Vector3(Math.sqrt(3)/3, Math.sqrt(3)/3, Math.sqrt(3)/3);
       }
     });
 

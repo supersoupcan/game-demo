@@ -22,10 +22,10 @@ const gridEdgeData = {
   }
 }
 
-export function createLineMeshes(scene){
-  const meshes = {};
+export function createLineMeshes(level){
+  level.meshes['line'] = {};
   gridLinePoints.forEach((points, key) => {
-    meshes[key] = MeshBuilder.CreateLines('line_' + key, 
+    level.meshes['line'][key] = MeshBuilder.CreateLines('line_' + key, 
       { options: {
         points: [ new Vector3(0, 0, 0), ...points],
         useVertexAlpha: false,

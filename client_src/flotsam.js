@@ -1,4 +1,5 @@
-//  Flotsam floating-point array encoder writting by spencertipping
+//  Flotsam floating-point array encoder written by spencertipping
+//  and provided under the MIT license
 //  https://github.com/spencertipping/flotsam/blob/master/js/flotsam.js
 
 /**

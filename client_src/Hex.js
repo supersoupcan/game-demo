@@ -1,14 +1,11 @@
-import * as math from 'mathjs';
-import flotsam from './flotsam';
-
-//no simple way of subclassing Arrays. Alas, ES6 class notation!
-//flotsam is used to efficiently serialize instances to unique strings
+ import flotsam from './flotsam';
+import { Vector3 } from 'babylonjs';
 
 function lerp(a, b, t){
   return a * ( 1 - t ) + b * t;
 }
 
-class Vector extends Array{
+class Hex extends Array{
   constructor(){
     if(arguments[0] && typeof arguments[0] === 'string'){
       super(...flotsam.decode(arguments[0]));
@@ -25,37 +22,11 @@ class Vector extends Array{
   subtract(vector){
     return new this.constructor(...this.map((v, i) => v - vector[i]));
   }
-  multiply(constant){
-    return new this.constructor(...this.map((v, i) => v * constant));
+  multiply(scaler){
+    return new this.constructor(...this.map((v, i) => v * scaler));
   }
-  divide(constant){
-    return new this.constructor(...this.map((v, i) => v / constant));
-  }
-  transform(matrix, CustomConstructor = Vector){
-    const transformation = math.multiply(this, matrix).slice(0, -1);
-    return new CustomConstructor(...transformation);
-  }
-}
-
-class Hex extends Vector{
-  constructor(){
-    super(...arguments);
-  }
-  complete(shell){
-    //completes a hex of any two coordinants
-    //shell = an array or length 2, which contains two arrays of length 2, 
-    //which contain in index0 a chosen coordinate, and index1 that coordinates value
-    let complete = [...new Array(3)];
-    let missingValue = 0;
-    shell.forEach((coord) => {
-      complete[coord[0]] = coord[1];
-      missingValue -= coord[1];
-    })
-    const missingIndex = complete.findIndex((value) => {
-      return !Number.isInteger(value);
-    })
-    complete[missingIndex] = missingValue;
-    return new Hex(complete[0], complete[1]);
+  divide(scaler){
+    return new this.constructor(...this.map((v, i) => v / scaler));
   }
   direction(directionIndex){
     return hexDirections[directionIndex % 6];
@@ -66,17 +37,19 @@ class Hex extends Vector{
   neighbour(directionIndex){
     return this.add(this.direction(directionIndex))
   }
+  neighbours(){
+    return this.directions.map((direction) => this.add(direction));
+  }
   edges(){
     return hexEdges;
   }
-  corner(index){
+  corners(index){
     return this.add(this.neighbour(index)).add(this.neighbour((index + 1) % 6)).divide(3);
   }
   vLength(){
     return (Math.abs(this[0]) + Math.abs(this[1]) + Math.abs(-this[0] - this[1])) / 2;
   }
   distance(vector){
-
     const subtract = this.subtract(vector);
     const vLength = subtract.vLength();
     return vLength;
@@ -90,10 +63,10 @@ class Hex extends Vector{
     }
     return results;
   }
-  lerp(hex, constant){
+  lerp(hex, scaler){
     return new Hex(
-      lerp(this[0], hex[0], constant),
-      lerp(this[1], hex[1], constant)
+      lerp(this[0], hex[0], scaler),
+      lerp(this[1], hex[1], scaler)
     )
   }
   round(){
@@ -112,16 +85,15 @@ class Hex extends Vector{
 
     return new Hex(rounded[0], rounded[1]);
   }
-  toEuc(){
-    return {
-      x: Math.sqrt(3) * this[0] + Math.sqrt(3)/2 * this[1],
-      y: 3/2 * this[1]
-    }
+  toVector3(y){
+    const x = Math.sqrt(3) * this[0] + Math.sqrt(3)/2 * this[1];
+    const z = 3/2 * this[1];
+    return new Vector3(x, y, z);
   }
-  fromEuc(x, y){
+  fromVector3(vector3){
     return new Hex(
-      Math.sqrt(3)/3 * x + -1/3 * y,
-      2/3 * y
+      Math.sqrt(3)/3 * vector3.x + -1/3 * vector3.z,
+      2/3 * vector3.z
     )
   }
 }
@@ -131,4 +103,4 @@ const hexDirections = [
   new Hex(0, -1), new Hex(1, -1), new Hex(1, 0)
 ];
 
-export { Vector, Hex }
+export default Hex;

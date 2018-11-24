@@ -100,7 +100,7 @@ Exporter version: 5.6.4, Blender version: 2.79 (sub 0)
 		num uvs2           :  0
 		num colors         :  0
 		num indices        :  24
-	processing begun of mesh:  water.center
+	processing begun of mesh:  water.tile
 		registered as also a user of material:  water
 		num positions      :  7
 		num normals        :  7
@@ -148,7 +148,7 @@ Exporter version: 5.6.4, Blender version: 2.79 (sub 0)
 		num uvs2           :  0
 		num colors         :  0
 		num indices        :  18
-	processing begun of mesh:  wall.center
+	processing begun of mesh:  wall.tile
 		registered as also a user of material:  wall
 		num positions      :  7
 		num normals        :  7
@@ -156,7 +156,7 @@ Exporter version: 5.6.4, Blender version: 2.79 (sub 0)
 		num uvs2           :  0
 		num colors         :  0
 		num indices        :  18
-	processing begun of mesh:  ground.center
+	processing begun of mesh:  ground.tile
 		registered as also a user of material:  ground
 		num positions      :  7
 		num normals        :  7
@@ -188,4 +188,4 @@ Exporter version: 5.6.4, Blender version: 2.79 (sub 0)
 ========= Writing of scene file started =========
 ========= Writing of scene file completed =========
 ========= end of processing =========
-elapsed time:  0 min, 0.0802 secs
+elapsed time:  0 min, 0.0731 secs

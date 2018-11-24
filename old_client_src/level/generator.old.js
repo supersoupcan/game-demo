@@ -1,79 +1,48 @@
-import { Hexagon } from '../common/hexShapes';
-import MinBinaryHeap from './MinBinaryHeap';
-import { Hex } from '../common/vectors';
 import random from '../common/random';
-
-const cf = {
-  regionCycles: 10,
-  regionAttempts: 20,
-  regionBase: 0,
-  regionRange: 3,
-}
-
-const Level = function(){
-  this.tiles = null;
-  this.shape = null;
-  this.regions = null;
-}
-
-Level.prototype.generate = function(){
-  const generator = new Generator(this);
-  generator.init();
-
-  generator.createRegions(5, 10, 
-    [{ 
-      base: 2, range: 1, minimumSpaceFraction: 8/10, HexShape: Hexagon 
-    }], 
-    (tile) => { tile.role = 'water'; }, 
-    null, 
-    (tile) => { tile.role = 'water'; }
-  )
+import { Hex } from '../common/vectors';
+import MinBinaryHeap from './MinBinaryHeap';
+import Tile from './Tile';
 
 
-  generator.createRegions(10, 10,
-    [{
-      base: 2, range: 1, minimumSpaceFraction: 7/10, HexShape: Hexagon
-    }],
-    (tile) => { tile.role = 'ground'},
-    (tile) => { if(tile && !tile.role) tile.role = 'wall'; },
-    (tile) => { tile.role = 'ground'}
-  )
-  generator.emptyTiles.forEach((key) => {
-    this.tiles.get(key).role = 'wall';
-  })
-}
-
-const Generator = function(level){
-  this.emptyTiles = null;
-  this.attempt = 0;
+Generator.prototype.init = function(level){
   this.level = level;
+  this.emptyTiles = new Set();
 }
 
-Generator.prototype.init = function(){
-  this.level.tiles = new Map();
-  this.level.regions = new Map();
-  this.emptyTiles = new Set();
-
-  //create base level shape
-  this.level.shape = new Hexagon([12, 12], [0, 1]);
-
-  //define border tiles as border
-  
+function basicTileMap(){
+   //define border tiles as border
+ 
   const tiles = this.level.shape.tiles(true);
-  tiles.border.forEach((key) => {
-    this.level.tiles.set(key, {
-      role: "wall"
-    })
+  tiles.border.map((key) => {
+    const tile = new Tile();
+    tile.role = "wall";
+    this.level.tiles.set(key, tile);
   });
  
   //define other tiles as roleless and add them to the set of emptytile
   tiles.content.map((key) => {
-    this.level.tiles.set(key, {
-      role: null
-    });
+    const tile = new Tile();
+    tile.role = 'ground';
+    this.level.tiles.set(key, tile);
     this.emptyTiles.add(key);
   });
 }
+
+/**
+ * @param { Set, <string > } tileset - set of tile keys to iterate over (tiles outside of this remain constant)
+ * @param { number } generations - number or iterations
+ * @param { Object[] } rules - contains a list of rules to run for each iteration
+ * @param { function } rules.match - wheter or not to match a given tile
+ * @param { function } rules.callback - what to do to a matched tile
+ * @param { Object[] = } init - run on first call to set initial tile values
+ * @param { function } init.match - wheter or not to match a given tile
+ * @param { function } init.callback - what to do to with the matched tile
+ */
+
+Generator.prototype.cellularAutomata = function(tileset){
+
+}
+
 
 const Region = function(shape, key){
   this.key = key;
@@ -108,9 +77,9 @@ Region.prototype.init = function(center, level, minimum){
  * @param { number } shapes.range - random variance in shape size
  * @param { number } shapes.minimumSpaceFraction - fraction required for max-region size to create
  * @param { HexShape } shapes.HexShape - shape type
- * @param { function } content - called on each tile with a region
- * @param { function } border - called on each tile on border of region
- * @param { funciton } connect - called on each tile which connects regions
+ * @param { function = } content - called on each tile with a region
+ * @param { function = } border - called on each tile on border of region
+ * @param { funciton = } connect - called on each tile which connects regions
 */
 
 Generator.prototype.createRegions = function(amount, maxAttempts, shapes, content, border, connect){
@@ -204,46 +173,4 @@ Generator.prototype.createRegions = function(amount, maxAttempts, shapes, conten
   }
 }
 
-/*
-Generator.prototype.connectRegions = function(){
-  const minSpanMap = new Map();
-  const minBinaryHeap = new MinBinaryHeap();
-
-  const regionArr = Array.from(this.level.regions);
-  
-  minBinaryHeap.init(regionArr.map((region) => region[0]));
-  minBinaryHeap.decreaseKey(random.select(regionArr)[0], 0);
-
-  while(minBinaryHeap.heap.length > 0){
-    const curRegion = this.level.regions.get(minBinaryHeap.extractMin().value);
-    minBinaryHeap.map.forEach((index, value) => {
-      const region = this.level.regions.get(value);
-      const d0 = new Hex(curRegion.center);
-      const d1 = new Hex(region.center);
-      const distance = d0.distance(d1);
-      if(minBinaryHeap.heap[index].key > distance){
-        minBinaryHeap.decreaseKey(value, distance);
-        minSpanMap.set(value, curRegion.key);
-      }
-    })
-  }
-
-  minSpanMap.forEach((key, value) => {
-    const region0 = this.level.regions.get(value);
-    const region1 = this.level.regions.get(key);
-    
-    const d0 = new Hex(region0.center);
-    const d1 = new Hex(region1.center);
-
-    const line = d0.line(d1);
-    line.forEach((hex) => {
-      let tile = this.level.tiles.get(hex.serialize());
-      tile.role = 'ground';
-      tile.road = true;
-    })
-  })
-}
-
-*/
-
-export { Level }
+export default Generator;
