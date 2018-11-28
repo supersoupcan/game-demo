@@ -1,9 +1,7 @@
  import flotsam from './flotsam';
 import { Vector3 } from 'babylonjs';
 
-function lerp(a, b, t){
-  return a * ( 1 - t ) + b * t;
-}
+import { lerp } from './utils';
 
 class Hex extends Array{
   constructor(){
@@ -38,7 +36,7 @@ class Hex extends Array{
     return this.add(this.direction(directionIndex))
   }
   neighbours(){
-    return this.directions.map((direction) => this.add(direction));
+    return this.directions().map((direction) => this.add(direction));
   }
   edges(){
     return hexEdges;

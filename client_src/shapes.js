@@ -1,4 +1,5 @@
 import Hex from './Hex';
+import { random }  from './utils';
 
 //Creates various Shapes composed of Hex Tiles
 //Each Shape is built around a center Hex tile of [0, 0]
@@ -18,6 +19,33 @@ function indicesMapper(){
         return coords.reduce((acc, cur) => acc - cur, 0);
       }
     }))
+  }
+}
+
+function interpretIndices(indices, indicesArray){
+  if(!Array.isArray(indices)){
+    return random.select(indicesArray);
+  }else if(Array.isArray(indices[0])){
+    return random.select(indices);
+  }else{
+    return indices;
+  }
+}
+
+function intepretSize(size){
+  if(Array.isArray(size)){
+    return size;
+  }else{
+    const range = size.range;
+    const difference = size.difference;
+    const firstSize = random.range(range.base, range.offset);
+    let secondSize;
+    if(difference){
+      secondSize = random.range(difference.base + firstSize, difference.offset)
+    }else{
+      secondSize = random.range(range.base, range.offset);
+    }
+    return [firstSize, secondSize];
   }
 }
 
@@ -48,12 +76,13 @@ HexShape.prototype.borderSet = function(){
   return borderSet;
 }
 
-HexShape.prototype.sets = function(){
+HexShape.prototype.sets = function(center){
   const contentSet = new Set();
   const borderSet = new Set();
   const size = this.size.map((size) => size + 1);
   this.iterator(size, (c0, c1) => {
-    const hex = this.completeHex(c0, c1);
+    let hex = this.completeHex(c0, c1);
+    if(center) hex = hex.add(center);
     if(this.onBorder(c0, c1, size)){
       borderSet.add(hex.serialize());
     }else{
@@ -92,7 +121,16 @@ const Parallelogram = function(size, indices){
 Parallelogram.prototype = Object.create(HexShape.prototype);
 Parallelogram.prototype.constructor = Parallelogram;
 
-const Hexagon = function(size, indices){
+/**
+ * 
+ * @param {Array[]|Object } sizeOptions - look at intepretSize
+ * @param {Array[]|Array|Object|} indicesOptions - look at interpretIndices
+ */
+
+const Hexagon = function(sizeOptions, indicesOptions){
+  const size = intepretSize(sizeOptions);
+  const indices = interpretIndices(indicesOptions, hexagonIndices);
+  
   HexShape.call(this, size, indices);
   this.iterator = function(size, callback){
     for(let c0 = -size[0]; c0 <= size[0]; c0++){
@@ -112,7 +150,11 @@ const Hexagon = function(size, indices){
   }
 }
 
+
+
 Hexagon.prototype = Object.create(HexShape.prototype);
 Hexagon.prototype.constructor = Hexagon;
+
+const hexagonIndices = [[0, 1],[1, 2],[2, 0]];
 
 export { Parallelogram, Hexagon, Rectangle };

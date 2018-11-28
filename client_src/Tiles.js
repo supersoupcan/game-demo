@@ -6,8 +6,8 @@ class Tiles extends Map {
   }
   findNeighbours(key){
     const hex = new Hex(key);
-    return hex.neighbours.map((neighbourHex, directionIndex) => {
-      const key = neighbourHex.seralize();
+    return hex.neighbours().map((neighbourHex, directionIndex) => {
+      const key = neighbourHex.serialize();
       if(this.has(key)){
         return {
           directionIndex: directionIndex,
@@ -17,6 +17,5 @@ class Tiles extends Map {
     });
   }
 }
-
 
 export default Tiles;

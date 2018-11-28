@@ -1,6 +1,6 @@
 import random from '../common/random';
 import { Hex } from '../common/vectors';
-import MinBinaryHeap from './MinBinaryHeap';
+import MinBinaryHeap from '../../client_src/MinBinaryHeap';
 import Tile from './Tile';
 
 
@@ -39,10 +39,6 @@ function basicTileMap(){
  * @param { function } init.callback - what to do to with the matched tile
  */
 
-Generator.prototype.cellularAutomata = function(tileset){
-
-}
-
 
 const Region = function(shape, key){
   this.key = key;
@@ -55,7 +51,7 @@ Region.prototype.init = function(center, level, minimum){
   //try form this region centered around a random empty tile
   this.center = center;
   this.tiles = new Set();
-
+a
   //record whether each inner tile can be added to the region
   this.shape.content(true).forEach((key) => {
     const hex = (new Hex(key)).add(new Hex(this.center));
@@ -100,8 +96,6 @@ Generator.prototype.createRegions = function(amount, maxAttempts, shapes, conten
     let curAttempt = 0;
     let isSuccess = false;
 
-   
-    
     while(!isSuccess && curAttempt < maxAttempts){
       const center = random.select(Array.from(this.emptyTiles));
       isSuccess = region.init(center, this.level, shape.content().length * shapeRecipe.minimumSpaceFraction);
@@ -146,8 +140,8 @@ Generator.prototype.createRegions = function(amount, maxAttempts, shapes, conten
       const curRegion = regions.get(minBinaryHeap.extractMin().value);
       minBinaryHeap.map.forEach((index, value) => {
         const region = regions.get(value);
-        const d0 = new Hex(curRegion.center);
-        const d1 = new Hex(region.center);
+        const c0 = new Hex(curRegion.center);
+        const c1 = new Hex(region.center);
         const distance = d0.distance(d1);
         if(minBinaryHeap.heap[index].key > distance){
           minBinaryHeap.decreaseKey(value, distance);

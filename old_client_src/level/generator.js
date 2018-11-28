@@ -17,7 +17,7 @@ export function createTiles(shape, onContent, onBorder){
       tiles.set(key, tile)
     })
   }
-
+  
   if(onBorder){
     tiles.content.forEach((key) => {
       const tile = onBorder(key);

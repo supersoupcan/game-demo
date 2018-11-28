@@ -24,13 +24,13 @@ Viewport.prototype.init = async function(engine, done){
       this.meshes[meshType][meshName] = mesh;
       mesh.convertToFlatShadedMesh();
       mesh.rotate(Axis.Y, Math.PI/6, Space.WORLD);
-      mesh.scaling = new Vector3(Math.sqrt(3)/3,  Math.sqrt(3)/3,  Math.sqrt(3)/3);
+      mesh.scaling = new Vector3(Math.sqrt(3)/3, Math.sqrt(3)/3,  Math.sqrt(3)/3);
       mesh.setEnabled(false);
       mesh.freezeWorldMatrix();
     })
     addLineMeshes(this);
 
-    const camera = new FreeCamera('camera', new Vector3(0, 10, -10), this.scene);
+    const camera = new FreeCamera('camera', new Vector3(0, 30, -30), this.scene);
 
     camera.setTarget(Vector3.Zero());
     camera.attachControl(engine.getRenderingCanvas(), true);
@@ -44,8 +44,6 @@ Viewport.prototype.init = async function(engine, done){
 
 
 Viewport.prototype.loadLevel = function(level){
-
-
   const light = new HemisphericLight('light', new Vector3(0, 1, 1), this.scene);
 
   light.intensity = 0.9;
@@ -57,13 +55,13 @@ Viewport.prototype.loadLevel = function(level){
   const edges = new Map();
 
   level.tiles.forEach((tile, key) => {
-
     const hex = new Hex(key);
-
-    const assetMesh = this.meshes['tile'][tile.role];
-    const tileMesh = assetMesh.createInstance('tile_' + key);
-    tileMesh.position = hex.toVector3(0);
-    tileMesh.freezeWorldMatrix();
+    if(tile && tile.role){
+      const assetMesh = this.meshes['tile'][tile.role];
+      const tileMesh = assetMesh.createInstance('tile_' + key);
+      tileMesh.position = hex.toVector3(0);
+      tileMesh.freezeWorldMatrix();
+    }
 
     const corners = [...Array(6)].map((_, index) => hex.corners(index));
     corners.forEach((cornerHex, index) => {
@@ -96,26 +94,28 @@ Viewport.prototype.loadLevel = function(level){
         }
       }
     })();
-
-    const assetMesh = this.meshes['edge'][solution.edgesKey];
-    const edgeMesh = assetMesh.createInstance('edge_' + key);
-
-    const rotation = Math.PI/3 * (2 + (edge.offset * 3) + (solution.rotationIndex  * 2));
     
-    edgeMesh.rotate(Axis.Y, rotation, Space.WORLD);
-    edgeMesh.position = hex.toVector3(0);
-    edgeMesh.freezeWorldMatrix();
-
-    if(edgeLines.hasOwnProperty(solution.edgesKey)){
-      const { lines, height } =  edgeLines[solution.edgesKey];
-
-      lines.forEach((name, index) => {
-        const lineAsset = this.meshes['line'][name];
-        const lineMesh = lineAsset.createInstance('line_' + key);
-        lineMesh.rotate(Axis.Y, index * 2 * Math.PI/3 + rotation, Space.WORLD);
-        lineMesh.position = hex.toVector3(Math.sqrt(3)/3 * height + 0.01);
-        lineMesh.freezeWorldMatrix();
-      })
+    if(solution){
+      const assetMesh = this.meshes['edge'][solution.edgesKey];
+      const edgeMesh = assetMesh.createInstance('edge_' + key);
+  
+      const rotation = Math.PI/3 * (2 + (edge.offset * 3) + (solution.rotationIndex  * 2));
+      
+      edgeMesh.rotate(Axis.Y, rotation, Space.WORLD);
+      edgeMesh.position = hex.toVector3(0);
+      edgeMesh.freezeWorldMatrix();
+  
+      if(edgeLines.hasOwnProperty(solution.edgesKey)){
+        const { lines, height } =  edgeLines[solution.edgesKey];
+  
+        lines.forEach((name, index) => {
+          const lineAsset = this.meshes['line'][name];
+          const lineMesh = lineAsset.createInstance('line_' + key);
+          lineMesh.rotate(Axis.Y, index * 2 * Math.PI/3 + rotation, Space.WORLD);
+          lineMesh.position = hex.toVector3(Math.sqrt(3)/3 * height + 0.01);
+          lineMesh.freezeWorldMatrix();
+        })
+      }
     }
   })
 }
