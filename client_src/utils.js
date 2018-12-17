@@ -37,6 +37,14 @@ export const parametric = {
   }
 }
 
+export function compare(length, callback){
+  for(let i = 0; i < length; i++){
+    for(let q = i + 1; q < length; q++){
+      callback(i, q);
+    }
+  }
+}
+
 export function lerp(a, b, t){
   return a * ( 1 - t ) + b * t;
 }
